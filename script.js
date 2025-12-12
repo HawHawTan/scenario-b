@@ -1,14 +1,17 @@
 let store = [];
-let nextButton = document.getElementById("next");
-let prevButton = document.getElementById("prev");
+const nextButton = document.getElementById("next");
+const prevButton = document.getElementById("prev");
 
-const slider = document.querySelector(".slider-list");
+const sliderList = document.querySelector(".slider-list");
+const sliderWrapper = document.querySelector(".slider");
+const articles = document.querySelectorAll("article");
+const img = document.createElement("img");
 const silde = document.getElementById("slide");
 const dots = document.getElementsByClassName("dots");
 const slideWidth = 200; // must match image width
 let currentIndex = 0;
 
-// getting the api from Art Institute of Chicago API 
+// getting the api from Art Institute of Chicago API
 //https://api.artic.edu/docs/
 async function getImg(imgSize) {
   const url = "https://api.artic.edu/api/v1/artworks";
@@ -30,7 +33,7 @@ async function getImg(imgSize) {
   }
 }
 
-// showing which one are previous, current, and next. 
+// showing which one are previous, current, and next.
 function updateActiveSlide() {
   // const slides = document.querySelectorAll(".slide");
   const slides = document.querySelectorAll("article");
@@ -48,46 +51,62 @@ function updateActiveSlide() {
 }
 
 function initialLoad() {
-  // storing the artitle and imgeurl into an array
-  getImg(200).then((ids) => {
-    store = ids;
-    const container = document.querySelector(".slider-list");
+  const loader = document.createElement("img");
+  loader.src = "images/3-dots-fade.svg";
+  loader.classList.add("loader");
+  loader.alt = "Loading";
+  sliderWrapper.appendChild(loader);
+
+  setTimeout(async () => {
+    store = await getImg(200);
+
+    // remove loader
+    loader.remove();
+    sliderList.classList.add("is-loaded");
+
     store.forEach((art, index) => {
       const article = document.createElement("article");
       const img = document.createElement("img");
       const title = document.createElement("h3");
-      const dots = document.createElement('div');
+
       img.src = art.imageUrl;
       img.alt = art.artTitle;
       img.classList.add("slide");
       img.loading = "lazy";
       img.draggable = false;
-      img.style.userSelect = "none";
       img.dataset.index = index;
+
       title.textContent = art.artTitle;
 
-      article.appendChild(img);
-      article.appendChild(title);
-      container.appendChild(article);
+      article.append(img, title);
+      sliderList.appendChild(article);
+
+      // ✅ stagger entrance animation
+      setTimeout(() => {
+        article.classList.add("is-visible");
+      }, index * 500);
     });
+
     updateActiveSlide();
-  });
+  }, 1000);
 }
 
-// buttons 
+
+
+// buttons
 nextButton.addEventListener("click", () => {
-    if (currentIndex < store.length - 1) {
-      currentIndex++;
-      updateActiveSlide();
-      slider.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
-    }
-    console.log(currentIndex);
+  if (currentIndex < store.length - 1) {
+    currentIndex++;
+    updateActiveSlide();
+    sliderList.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+  }
+  console.log(currentIndex);
 });
 
 prevButton.addEventListener("click", () => {
   if (currentIndex > 0) {
     currentIndex--;
     updateActiveSlide();
-    slider.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+    sliderList.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
   }
 });

@@ -1,13 +1,15 @@
 let store = [];
 const nextButton = document.getElementById("next");
 const prevButton = document.getElementById("prev");
-
-const sliderList = document.querySelector(".slider-list");
-const sliderWrapper = document.querySelector(".slider");
-const articles = document.querySelectorAll("article");
-const img = document.createElement("img");
 const silde = document.getElementById("slide");
 const dots = document.getElementsByClassName("dots");
+
+const articles = document.querySelectorAll("article");
+const sliderList = document.querySelector(".slider-list");
+const sliderWrapper = document.querySelector(".slider");
+const pagination = document.querySelector(".pagination");
+
+const img = document.createElement("img");
 const slideWidth = 200; // must match image width
 let currentIndex = 0;
 
@@ -42,6 +44,7 @@ function updateActiveSlide() {
     slide.classList.remove("is-prev", "is-current", "is-next");
     if (index === currentIndex) {
       slide.classList.add("is-current");
+      
     } else if (index === currentIndex - 1) {
       slide.classList.add("is-prev");
     } else if (index === currentIndex + 1) {
@@ -49,6 +52,21 @@ function updateActiveSlide() {
     }
   });
 }
+
+function updatePagination() {
+  const dots = pagination.querySelectorAll("button");
+
+  dots.forEach((dot, index) => {
+    dot.classList.toggle("is-active", index === currentIndex);
+  });
+}
+
+function goToSlide(index) {
+  currentIndex = index;
+  sliderList.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+  updatePagination();
+}
+
 
 function initialLoad() {
   const loader = document.createElement("img");
@@ -68,22 +86,34 @@ function initialLoad() {
       const article = document.createElement("article");
       const img = document.createElement("img");
       const title = document.createElement("h3");
+      const dot = document.createElement("button");
 
+      // creating an img with title
       img.src = art.imageUrl;
       img.alt = art.artTitle;
       img.classList.add("slide");
       img.loading = "lazy";
       img.draggable = false;
       img.dataset.index = index;
-
       title.textContent = art.artTitle;
 
       article.append(img, title);
       sliderList.appendChild(article);
 
-      // ✅ stagger entrance animation
+       dot.addEventListener("click", () => {
+          currentIndex = index;
+          updateActiveSlide();
+          updatePagination();
+          sliderList.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+        });
+
+        // to show when is first loaded
+        updatePagination();
+        pagination.appendChild(dot);
+
       setTimeout(() => {
         article.classList.add("is-visible");
+        dot.classList.add("moveUp");
       }, index * 500);
     });
 
@@ -98,6 +128,7 @@ nextButton.addEventListener("click", () => {
   if (currentIndex < store.length - 1) {
     currentIndex++;
     updateActiveSlide();
+    goToSlide(currentIndex );
     sliderList.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
   }
   console.log(currentIndex);
@@ -108,5 +139,8 @@ prevButton.addEventListener("click", () => {
     currentIndex--;
     updateActiveSlide();
     sliderList.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+     goToSlide(currentIndex);
   }
 });
+
+

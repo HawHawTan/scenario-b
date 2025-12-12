@@ -18,7 +18,6 @@ header{
   gap: 1rem;
   width: 80%;
   margin: auto;
-  /* margin-left: 80px; */
 }
 
 .loader {
@@ -61,10 +60,12 @@ header{
   display: flex;
   flex-direction: row;
   transition: transform 0.6s ease-in-out;
-  /* width: 70%; */
-  /* gap: 40px; */
   align-items: center;
-  /* margin-left: 35px; */
+
+}
+
+.slider-list.is-loaded{
+    margin-left: 50px;
 }
 
 .slider-list img {

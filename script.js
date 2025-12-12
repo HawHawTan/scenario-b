@@ -10,7 +10,7 @@ const sliderWrapper = document.querySelector(".slider");
 const pagination = document.querySelector(".pagination");
 
 const img = document.createElement("img");
-const slideWidth = 200; // must match image width
+const slideWidth = 200;
 let currentIndex = 0;
 
 // getting the api from Art Institute of Chicago API
@@ -37,7 +37,6 @@ async function getImg(imgSize) {
 
 // showing which one are previous, current, and next.
 function updateActiveSlide() {
-  // const slides = document.querySelectorAll(".slide");
   const slides = document.querySelectorAll("article");
   const titles = document.querySelectorAll("h2");
   slides.forEach((slide, index) => {

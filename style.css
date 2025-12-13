@@ -28,7 +28,7 @@ header{
 
 .slider-viewport {
   position: relative;
-  touch-action: pan-y;
+  /* touch-action: pan-y; */
   overflow: hidden;
   max-width: 800px;
 }
@@ -37,9 +37,7 @@ header{
 .nav {
   position: absolute;
   top: 50%;
-  transform: translateY(-50%);
   z-index: 5;
-
   background: rgba(0, 0, 0, 0.5);
   color: #fff;
   border-radius: 20px;
@@ -57,6 +55,10 @@ header{
 }
 
 .slider-list {
+  touch-action: pan-y;
+}
+
+.slider-list {
   display: flex;
   flex-direction: row;
   transition: transform 0.6s ease-in-out;
@@ -65,7 +67,7 @@ header{
 }
 
 .slider-list.is-loaded{
-    margin-left: 50px;
+    margin-left: 40px;
 }
 
 .slider-list img {
@@ -75,38 +77,41 @@ header{
   border-radius: 8px;
 }
 
-.slider-list article {
+.slider-list figure {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin: 0 10px;
+  
 }
 
-article .slide {
+figure .slide {
   transition: transform 0.5s ease, opacity 0.5s ease;
   transform: scale(0.8);
   opacity: 0.5;
   z-index: 1;
 }
 
-article.is-current .slide {
+
+figure.is-current .slide {
   transform: scale(1.1);
   opacity: 1;
   z-index: 3;
 }
 
-article.is-prev .slide,
-article.is-next .slide {
+figure.is-prev .slide,
+figure.is-next .slide {
   transform: scale(0.8);
   opacity: 0.7;
   z-index: 2;
 }
 
-article, .pagination button {
+figure, .pagination button {
   opacity: 0;
   transform: translateY(20px);
 }
 
-article.is-visible, .pagination button.moveUp {
+figure.is-visible, .pagination button.moveUp {
   animation: fadeUp 0.6s ease forwards;
 }
 
@@ -117,14 +122,15 @@ article.is-visible, .pagination button.moveUp {
   }
 }
 
-.slider-list article h3 {
+.slider-list figure figcaption {
   opacity: 0;
+  margin: 40px 0;
   transform: translateY(10px);
   transition: opacity 0.4s ease, transform 0.4s ease;
   pointer-events: none;
 }
 
-.slider-list article.is-current h3 {
+.slider-list figure.is-current figcaption {
   opacity: 1;
   font-size: 1.5rem;
   transform: translateY(0);
@@ -167,6 +173,11 @@ button {
   cursor: pointer;
   background: none;
   border: none;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background: rgba(0, 0, 0, 0.8);
 }
 
 button:focus-visible {

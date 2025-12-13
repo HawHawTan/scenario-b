@@ -4,13 +4,13 @@ const prevButton = document.getElementById("prev");
 const silde = document.getElementById("slide");
 const dots = document.getElementsByClassName("dots");
 
-const articles = document.querySelectorAll("article");
+const figure = document.querySelectorAll("figure");
 const sliderList = document.querySelector(".slider-list");
 const sliderWrapper = document.querySelector(".slider");
 const pagination = document.querySelector(".pagination");
 
 const img = document.createElement("img");
-const slideWidth = 200;
+const slideWidth = 220;
 let currentIndex = 0;
 
 // getting the api from Art Institute of Chicago API
@@ -37,7 +37,7 @@ async function getImg(imgSize) {
 
 // showing which one are previous, current, and next.
 function updateActiveSlide() {
-  const slides = document.querySelectorAll("article");
+  const slides = document.querySelectorAll("figure");
   const titles = document.querySelectorAll("h2");
   slides.forEach((slide, index) => {
     slide.classList.remove("is-prev", "is-current", "is-next");
@@ -82,9 +82,9 @@ function initialLoad() {
     sliderList.classList.add("is-loaded");
 
     store.forEach((art, index) => {
-      const article = document.createElement("article");
+      const figure = document.createElement("figure");
       const img = document.createElement("img");
-      const title = document.createElement("h3");
+      const title = document.createElement("figcaption");
       const dot = document.createElement("button");
 
       // creating an img with title
@@ -96,8 +96,8 @@ function initialLoad() {
       img.dataset.index = index;
       title.textContent = art.artTitle;
 
-      article.append(img, title);
-      sliderList.appendChild(article);
+      figure.append(img, title);
+      sliderList.appendChild(figure);
 
        dot.addEventListener("click", () => {
           currentIndex = index;
@@ -111,7 +111,7 @@ function initialLoad() {
         pagination.appendChild(dot);
 
       setTimeout(() => {
-        article.classList.add("is-visible");
+        figure.classList.add("is-visible");
         dot.classList.add("moveUp");
       }, index * 500);
     });

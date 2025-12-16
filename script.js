@@ -184,7 +184,6 @@ nextButton.addEventListener("click", () => {
 });
 
 prevButton.addEventListener("click", () => {
-    currentIndex--;
     goToSlide(currentIndex - 1);
 
 });

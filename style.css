@@ -12,26 +12,29 @@ header{
 .slider {
   position: relative;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   min-height: 60vh;
   gap: 1rem;
-  width: 80%;
-  margin: auto;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .loader {
   height: 150px;
   width: 150px;
+  position: absolute;
 }
 
 
 .slider-viewport {
-  position: relative;
-  /* touch-action: pan-y; */
-  overflow: hidden;
+  width: 100%;
   max-width: 800px;
+  margin: 0 auto;
+  overflow: hidden;
 }
+
 
 
 .nav {
@@ -66,9 +69,9 @@ header{
 
 }
 
-.slider-list.is-loaded{
+/* .slider-list.is-loaded{
     margin-left: 40px;
-}
+} */
 
 .slider-list img {
   object-fit: cover;
@@ -94,7 +97,7 @@ figure .slide {
 
 
 figure.is-current .slide {
-  transform: scale(1.1);
+  transform: scale(1);
   opacity: 1;
   z-index: 3;
 }
@@ -136,6 +139,26 @@ figure.is-visible, .pagination button.moveUp {
   transform: translateY(0);
 }
 
+
+.carousel-caption {
+  text-align: center;
+  margin-top: 24px;
+  min-height: 2.5em;
+}
+
+.carousel-caption h2 {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.carousel-caption h2.is-changing {
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+
+/* pagination */
 .pagination {
   display: flex;
   justify-content: center;
@@ -199,9 +222,9 @@ footer{
 
 @media (min-width: 768px) {
 
-  .slider-list.is-loaded{
+  /* .slider-list.is-loaded{
     margin-left: 200px;
-  }
+  } */
  }
 
 

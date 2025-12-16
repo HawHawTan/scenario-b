@@ -77,8 +77,8 @@ function normalizeIndex(index) {
   return index;
 }
 
-function goToSlide() {
-  currentIndex = normalizeIndex(currentIndex);
+function goToSlide(index) {
+  currentIndex = normalizeIndex(index);
   updateCaption(currentIndex);
   updatePagination();
   updateActiveSlide();
@@ -163,7 +163,7 @@ function initialLoad() {
       sliderList.appendChild(figure);
 
       dot.addEventListener("click", () => {
-        goToSlide();
+        goToSlide(index);
       });
 
       // to show when is first loaded
@@ -180,12 +180,11 @@ function initialLoad() {
 
 // buttons
 nextButton.addEventListener("click", () => {
-    currentIndex++;
-    goToSlide();
+    goToSlide(currentIndex + 1);
 });
 
 prevButton.addEventListener("click", () => {
     currentIndex--;
-    goToSlide();
+    goToSlide(currentIndex - 1);
 
 });

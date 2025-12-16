@@ -29,6 +29,7 @@ header{
 
 
 .slider-viewport {
+  position: relative;
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
@@ -36,11 +37,9 @@ header{
 }
 
 
-
 .nav {
   position: absolute;
   top: 50%;
-  z-index: 5;
   background: rgba(0, 0, 0, 0.5);
   color: #fff;
   border-radius: 20px;
@@ -69,9 +68,6 @@ header{
 
 }
 
-/* .slider-list.is-loaded{
-    margin-left: 40px;
-} */
 
 .slider-list img {
   object-fit: cover;
@@ -220,11 +216,5 @@ footer{
   }
 }
 
-@media (min-width: 768px) {
-
-  /* .slider-list.is-loaded{
-    margin-left: 200px;
-  } */
- }
 
 

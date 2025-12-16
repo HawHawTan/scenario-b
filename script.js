@@ -1,18 +1,16 @@
 let store = [];
 const nextButton = document.getElementById("next");
 const prevButton = document.getElementById("prev");
-const silde = document.getElementById("slide");
+const silde = document.getElementById("slide"); //img 
  const title = document.getElementById("carousel-title");
 
 const dots = document.getElementsByClassName("dots");
 
-const figure = document.querySelectorAll("figure");
 const sliderList = document.querySelector(".slider-list");
 const sliderWrapper = document.querySelector(".slider");
 const pagination = document.querySelector(".pagination");
 
 const img = document.createElement("img");
-const slideWidth = 220;
 const currentScreenSize = window.innerWidth;
 const smallImage = 200;
 const largeImage = 400;
@@ -61,7 +59,7 @@ function updateCaption (index){
   setTimeout(() => {
     title.textContent = store[index].artTitle;
     title.classList.remove("is-changing");
-  }, 300); // match CSS transition duration
+  }, 300);
 }
 
 function updatePagination() {
@@ -79,54 +77,51 @@ function normalizeIndex(index) {
   return index;
 }
 
-function goToSlide(index) {
-  currentIndex = normalizeIndex(index);
-  updateCaption(index);
+function goToSlide() {
+  currentIndex = normalizeIndex(currentIndex);
+  updateCaption(currentIndex);
   updatePagination();
   updateActiveSlide();
-  centerSlide(currentIndex,10);
-  // const cal = 290 - getSlideWidth(index);
-  // sliderList.style.transform = `translateX(${-cal}px)`;
+  centerSlide(currentIndex);
+
 }
 
 function getSlideWidth(index) {
-  const slides = sliderList.querySelectorAll("figure");
-  // const width = Number(slides[index].dataset.width);
-  return slides[index].offsetWidth;
+   const styles = window.getComputedStyle(index); // read styles
+   // adding all of the margin left and right
+   const margin =
+      parseFloat(styles.marginLeft || "0") + 
+      parseFloat(styles.marginRight || "0"); 
+    return index.offsetWidth + margin;
 }
 
-function centerSlide(index, extraPadding = 0) {
+function centerSlide(index) {
   const viewport = document.querySelector(".slider-viewport");
   const viewportWidth = viewport.offsetWidth;
-
+  const slides = sliderList.querySelectorAll("figure");
   let offsetBefore = 0;
+
+  // depending how far you are from each card
   for (let i = 0; i < index; i++) {
-    offsetBefore += getSlideWidth(i);
+    offsetBefore += getSlideWidth(slides[i]);
   }
 
-  const currentWidth = getSlideWidth(index);
-  // console.log('====================================');
-  // console.log(currentWidth);
-  // console.log('====================================');
-  const slideCenter = offsetBefore + currentWidth / 2;
-
+  const currentWidth = getSlideWidth(slides[index]);
+  const slideCenter = offsetBefore + (currentWidth / 2);
   const viewportCenter = viewportWidth / 2;
   const offset = slideCenter - viewportCenter;
-  const cal = offset * -1 - (10*(index+1)+extraPadding);
-  sliderList.style.transform = `translateX(${cal}px)`;
+
+  sliderList.style.transform = `translateX(${-offset}px)`;
 }
 
 function initialLoad() {
   const loader = document.createElement("img");
   loader.src = "images/3-dots-fade.svg";
   loader.classList.add("loader");
-  loader.alt = "Loading";
+  loader.alt = "Loading artworks";
   sliderWrapper.appendChild(loader);
 
   setTimeout(async () => {
-    console.log('====================================');
-    console.log(currentScreenSize);
-    console.log('====================================');
     if (currentScreenSize >= 425){
       store = await getImg(largeImage);
     }
@@ -137,6 +132,9 @@ function initialLoad() {
     // remove loader
     loader.remove();
     sliderList.classList.add("is-loaded");
+
+    let imagesLoaded = 0;
+    const totalImages = store.length;
 
     store.forEach((art, index) => {
       const figure = document.createElement("figure");
@@ -150,13 +148,22 @@ function initialLoad() {
       img.loading = "lazy";
       img.draggable = false;
       img.dataset.index = index;
-      img.dataset.width = img.offsetWidth;
+      img.addEventListener("load", () => {
+        img.dataset.width = img.offsetWidth;
+
+        imagesLoaded++;
+        if (imagesLoaded === totalImages) {
+          updateCaption(currentIndex);
+          updateActiveSlide();
+          centerSlide(currentIndex);
+        }
+      });
 
       figure.append(img);
       sliderList.appendChild(figure);
 
       dot.addEventListener("click", () => {
-        goToSlide(index);
+        goToSlide();
       });
 
       // to show when is first loaded
@@ -168,29 +175,17 @@ function initialLoad() {
         dot.classList.add("moveUp");
       }, index * 200);
     });
-    updateCaption(currentIndex);
-    centerSlide(currentIndex);
-    updateActiveSlide();
   }, 1000);
 }
 
 // buttons
 nextButton.addEventListener("click", () => {
-  // if (currentIndex < store.length - 1) {
     currentIndex++;
-    // updateActiveSlide();
-    // goToSlide(currentIndex);
-    goToSlide(currentIndex,);
-    // console.log(num);
-  // }
-  // console.log(currentIndex);
+    goToSlide();
 });
 
 prevButton.addEventListener("click", () => {
-  // if (currentIndex > 0) {
     currentIndex--;
-    // updateActiveSlide();
-    // sliderList.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
-    goToSlide(currentIndex);
-  // }
+    goToSlide();
+
 });

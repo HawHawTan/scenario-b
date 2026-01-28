@@ -72,8 +72,10 @@ function updatePagination() {
 
 // is to check if its the end of an array or not
 function normalizeIndex(index) {
-  if (index < 0) return store.length - 1;
-  if (index >= store.length) return 0;
+  if (index < 0) 
+    return store.length - 1;
+  if (index >= store.length) 
+    return 0;
   return index;
 }
 
@@ -187,3 +189,34 @@ prevButton.addEventListener("click", () => {
     goToSlide(currentIndex - 1);
 
 });
+
+// Touch swipe functionality
+let touchStartX = 0;
+let touchEndX = 0;
+const swipeThreshold = 50; // Minimum distance in pixels for a swipe
+
+const sliderViewport = document.querySelector(".slider-viewport");
+
+sliderViewport.addEventListener("touchstart", (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+}, { passive: true });
+
+sliderViewport.addEventListener("touchend", (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+}, { passive: true });
+
+function handleSwipe() {
+    const swipeDistance = touchEndX - touchStartX;
+    
+    // Check if swipe distance meets the threshold
+    if (Math.abs(swipeDistance) > swipeThreshold) {
+        if (swipeDistance > 0) {
+            // Swipe right - go to previous slide
+            goToSlide(currentIndex - 1);
+        } else {
+            // Swipe left - go to next slide
+            goToSlide(currentIndex + 1);
+        }
+    }
+}

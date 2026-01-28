@@ -73,6 +73,7 @@ header{
   object-fit: cover;
   height: auto;
   object-fit: cover;
+  max-height: 500px;
   border-radius: 8px;
 }
 
